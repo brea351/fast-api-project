@@ -1,0 +1,60 @@
+CREATE DATABASE ClinicDB;
+USE ClinicDB;
+
+-- Departments Table
+CREATE TABLE Departments (
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Doctors Table
+CREATE TABLE Doctors (
+    doctor_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES Departments(department_id)
+);
+
+-- Patients Table
+CREATE TABLE Patients (
+    patient_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    date_of_birth DATE,
+    phone VARCHAR(15) UNIQUE
+);
+
+-- Appointments Table
+CREATE TABLE Appointments (
+    appointment_id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    appointment_date DATETIME NOT NULL,
+    reason TEXT,
+    FOREIGN KEY (patient_id) REFERENCES Patients(patient_id),
+    FOREIGN KEY (doctor_id) REFERENCES Doctors(doctor_id)
+);
+
+-- Prescriptions Table
+CREATE TABLE Prescriptions (
+    prescription_id INT AUTO_INCREMENT PRIMARY KEY,
+    appointment_id INT,
+    medication TEXT,
+    dosage VARCHAR(100),
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id)
+);
+
+-- Sample Data
+INSERT INTO Departments (name) VALUES ('Cardiology'), ('Neurology'), ('Pediatrics');
+
+INSERT INTO Doctors (name, department_id) VALUES 
+('Dr. Smith', 1), 
+('Dr. Adams', 2);
+
+INSERT INTO Patients (name, date_of_birth, phone) VALUES 
+('John Doe', '1990-05-12', '1234567890');
+
+INSERT INTO Appointments (patient_id, doctor_id, appointment_date, reason) VALUES 
+(1, 1, '2025-05-08 10:30:00', 'Routine Checkup');
+
+INSERT INTO Prescriptions (appointment_id, medication, dosage) VALUES 
+(1, 'Amoxicillin', '500mg 3x/day');
